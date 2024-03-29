@@ -1,0 +1,5 @@
+steps/ElementsPageSteps.class
+pages/WebTablesPageElements.class
+common/TestRunner.class
+pages/ElementsPageElements.class
+steps/WebTablesPageSteps.class
