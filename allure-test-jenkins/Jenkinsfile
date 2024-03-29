@@ -4,26 +4,26 @@ pipeline {
             maven 'mvn'
             jdk 'jdk'
     }
+
     stages {
-        stage('Run Docker Compose'){
+         stage ('Cloning Git'){
             steps {
-                step(
-                     def remoteUrl = [$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: true]
-                     echo ${remoteUrl}
-                )
-            }
-        }
+                    git branch: 'main', credentialsId: '1',
+            url: 'https://github.com/zeynepkazu/jenkins-test.git'
+     }
+       }
+
         stage('Run Test'){
             steps {
-               sh 'mvn compile'
+               sh 'mvn clean install'
                sh 'mvn clean test'
             }
         }
     }
+
     post {
-         always {
-            allure includeProperties: false, jdk: 'jdk', results: [[path: 'target/allure-results']]
-            step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StopAllServices'], useCustomDockerComposeFile: true])
-        }
+        always {
+         allure includeProperties: false, jdk: 'jdk',
+        results: [[path: 'target/allure-results']]
     }
 }
