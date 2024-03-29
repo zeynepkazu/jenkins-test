@@ -1,5 +1,5 @@
 pipeline {
-    agent {jenkins-agent}
+    agent any
 
     tools {
         maven 'mvn'
