@@ -1,29 +1,33 @@
 pipeline {
     agent any
+
     tools {
-            maven 'mvn'
-            jdk 'jdk'
+        maven 'mvn'
+        jdk 'jdk'
     }
 
     stages {
-         stage ('Cloning Git'){
+        stage('Cloning Git') {
             steps {
-                    git branch: 'main', credentialsId: '1',
-            url: 'https://github.com/zeynepkazu/jenkins-test.git'
-     }
-       }
+                git branch: 'main',
+                credentialsId: '1',
+                url: 'https://github.com/zeynepkazu/jenkins-test.git'
+            }
+        }
 
-        stage('Run Test'){
+        stage('Run Test') {
             steps {
-               sh 'mvn clean install'
-               sh 'mvn clean test'
+                sh 'mvn clean install'
+                sh 'mvn clean test'
             }
         }
     }
 
     post {
         always {
-         allure includeProperties: false, jdk: 'jdk',
-        results: [[path: 'target/allure-results']]
+            allure includeProperties: false,
+            jdk: 'jdk',
+            results: [[path: 'target/allure-results']]
+        }
     }
 }
